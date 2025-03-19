@@ -16,27 +16,34 @@
                 <input type="text" id="num_line" readonly />
                 <div id="buttons">
                     <!-- Number buttons -->
-                    <br><button class="num-btn" data-num="1">1</button>
+                    <br><button id="clear">C</button> <!-- Clear button -->
+                    <button id="parentheses">()</button>
+                    <button id="percentage">%</button>
+                    <button class="operator-btn" data-op="/">÷</button>
+
+                    <br><br><button class="num-btn" data-num="1">1</button>
                     <button class="num-btn" data-num="2">2</button>
                     <button class="num-btn" data-num="3">3</button>
+                    <button class="operator-btn" data-op="*">x</button>
+
                     <br><br><button class="num-btn" data-num="4">4</button>
                     <button class="num-btn" data-num="5">5</button>
                     <button class="num-btn" data-num="6">6</button>
+                    <button class="operator-btn" data-op="-">-</button>
+
                     <br><br><button class="num-btn" data-num="7">7</button>
                     <button class="num-btn" data-num="8">8</button>
                     <button class="num-btn" data-num="9">9</button>
-                    <button class="num-btn" data-num="0">0</button>
+                    <button class="operator-btn" data-op="+">+</button>
 
-                    <!-- Operator buttons -->
-                    <br><br><button class="operator-btn" data-op="+">+</button>
-                    <button class="operator-btn" data-op="-">-</button>
-                    <button class="operator-btn" data-op="*">x</button>
-                    <button class="operator-btn" data-op="/">÷</button>
+                    <br><br>
+                    <button class="pos-neg">+/-</button>
+                    <button class="num-btn" data-num="0">0</button>
+                    <button id="decimal">.</button>
 
                     <!-- Functional buttons -->
                     <br><br><button id="backspace">⌫</button>
                     <button id="equals">=</button> <!-- Equals button -->
-                    <button id="clear">C</button> <!-- Clear button -->
                 </div>
             </div>
 
