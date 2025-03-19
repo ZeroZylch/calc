@@ -30,15 +30,24 @@ document.addEventListener("DOMContentLoaded", function () {
     // Evaluate the expression when "=" is clicked
     equalsButton.addEventListener("click", function () {
         try {
-            currentInput = eval(currentInput); // Evaluate the expression
-            numLine.value = currentInput;
+            // Ensure the expression is valid and evaluate it
+            let result = eval(currentInput);
+
+            // Check if result is a valid number
+            if (isNaN(result)) {
+                numLine.value = "Error"; // Display Error if result is NaN
+                currentInput = ""; // Clear input
+            } else {
+                numLine.value = result; // Display the result
+                currentInput = result.toString(); // Convert the result back to a string
+            }
         } catch (error) {
             numLine.value = "Error"; // Display error for invalid expressions
             currentInput = "";
         }
     });
 
-    // Backspace button functionality
+    // Backspace button functionality (removes last character)
     backspaceButton.addEventListener("click", function () {
         currentInput = currentInput.slice(0, -1)
         numLine.value = currentInput;
@@ -46,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Clear button functionality
     clearButton.addEventListener("click", function () {
-        numLine.value = ""; // Reset input field
+        currentInput= "";
+        numLine.value = "";
     })
 })

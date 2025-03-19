@@ -1,11 +1,36 @@
+@font-face {
+    font-family: '8BitOperator';
+    src: url('./fonts/8bitOperatorPlus-Bold.ttf') format('truetype'),
+        url('./fonts/8bitOperatorPlus-Regular.ttf') format('truetype'),
+        url('./fonts/8bitOperatorPlus8-Bold.ttf') format('truetype'),
+        url('./fonts/8bitOperatorPlus8-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: '8BitOperator', sans-serif;
+    text-align: center;
+}
+
 h1 {
-    color: blue;
+    font-size: 5em;
+}
+
+#num_line {
+    height: 30px;
+    font-size: 25px;
+    text-align: right;
+}
+
+.calculator {
+    text-align: center;
 }
 
 #box {
     border: 3px solid blue;
     border-radius: 16px;
-    background-color: hsl(0, 0, 20);
+    background-color: hsl(0, 1%, 26%);
     width: 50px;
     height: 50px;
 }
