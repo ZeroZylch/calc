@@ -7,14 +7,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearButton = document.getElementById("clear"); // Clear button
     const backspaceButton = document.getElementById("backspace"); // Backspace button
     const decimalButton = document.getElementById("decimal"); // Decimal button
+    const posnegButton = document.getElementById("pos-neg"); // Positive/negative toggle button
 
     let currentInput = ""; // Stores the input expression
+
+    function predictResult() {
+        try {
+            let result = eval(currentInput);
+
+            if (isNaN(result)) {
+                upperNum.value = "";
+                console.log("Error, predicted result is not a number");
+            } else {
+                upperNum.value = result;
+                console.log("Result predicted correctly");
+            }
+        } catch (error) {
+            upperNum.value = ""; // Leave upper field blank for invalid expressions
+            console.log("Error:", error);
+        }
+    }
 
     // Append numbers to the input field
     numButtons.forEach(button => {
         button.addEventListener("click", function () {
             currentInput += this.getAttribute("data-num");
             lowerNum.value = currentInput;
+            predictResult();
             console.log("Current Input (number):", currentInput);
         });
     });
@@ -44,6 +63,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // Toggle input value between positive and negative
+    posnegButton.addEventListener("click", function () {
+        console.log("Pos-neg button clicked");
+        try {
+            let result = currentInput * -1;
+
+            if (isNaN(result)) {
+                return;
+            } else {
+                currentInput = result.toString();
+                lowerNum.value = currentInput;
+            }
+        } catch (error) {
+            console.log("Error:", error);
+            return;
+        }
+    })
+
     // Evaluate the expression when "=" is clicked
     equalsButton.addEventListener("click", function () {
         console.log("Equals button clicked");
@@ -57,8 +94,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentInput = ""; // Clear input
                 console.log("Error: Result is not a number");
             } else {
-                lowerNum.value = result; // Display the result
+                upperNum.value = result; // Display the result
                 currentInput = result.toString(); // Convert the result back to a string
+                lowerNum.value = currentInput;
                 console.log("Result output correctly");
             }
         } catch (error) {
