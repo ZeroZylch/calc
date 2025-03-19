@@ -11,13 +11,14 @@
             <h1>CALCULATOR LAND</h1>
         </header>
         <main>
-            <div class="calculator">
+            <div class="calculator-out">
+            <div class="calculator-in">
                 <h2>Let's Get Calculatin'!</h2>
-                <input type="text" id="num_line" readonly />
+                <div id="calc-top">
+                    <input type="text" id="num_line" placeholder="0" readonly />
+                    <button id="backspace"><b>⌫</b></button>
+                </div>
                 <div id="buttons">
-                    <div class="btn-row">
-                        <button id="backspace">⌫</button>
-                    </div>
                     <div class="btn-row">
                         <button id="clear">C</button>
                         <button id="parentheses">()</button>
@@ -48,7 +49,11 @@
                         <button id="decimal">.</button>
                         <button id="equals">=</button>
                     </div>
+                    <div class="btn-row">
+                        
+                    </div>
                 </div>
+            </div>
             </div>
 
             <script src="script.js"></script>
