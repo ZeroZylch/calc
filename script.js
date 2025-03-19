@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const numLine = document.getElementById("num_line"); // The input field
+    const upperNum = document.getElementById("upper_num"); // The upper input field
+    const lowerNum = document.getElementById("lower_num"); // The lower input field
     const numButtons = document.querySelectorAll(".num-btn"); // Select all number buttons
     const operatorButtons = document.querySelectorAll(".operator-btn"); // Operator buttons
     const equalsButton = document.getElementById("equals"); // Equals button
@@ -13,16 +14,17 @@ document.addEventListener("DOMContentLoaded", function () {
     numButtons.forEach(button => {
         button.addEventListener("click", function () {
             currentInput += this.getAttribute("data-num");
-            numLine.value = currentInput;
+            lowerNum.value = currentInput;
             console.log("Current Input (number):", currentInput);
         });
     });
 
+    // Add a decimal at the end of the input field
     decimalButton.addEventListener("click", function () {
         console.log("Decimal button clicked");
         if (currentInput !== "" && !currentInput.includes(".") && !isNaN(currentInput[currentInput.length -1])) {
             currentInput += ".";
-            numLine.value = currentInput;
+            lowerNum.value = currentInput;
             console.log("Current Input (decimal added):", currentInput);
         } else {
             console.log("Decimal already exists or input is invalid");
@@ -36,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Avoid adding multiple operators in a row
             if (currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
                 currentInput += this.getAttribute("data-op");
-                numLine.value = currentInput;
+                lowerNum.value = currentInput;
                 console.log("Current Input (operator added):", currentInput);
             }
         });
@@ -51,16 +53,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Check if result is a valid number
             if (isNaN(result)) {
-                numLine.value = "Error"; // Display Error if result is NaN
+                lowerNum.value = "Error"; // Display Error if result is NaN
                 currentInput = ""; // Clear input
                 console.log("Error: Result is not a number");
             } else {
-                numLine.value = result; // Display the result
+                lowerNum.value = result; // Display the result
                 currentInput = result.toString(); // Convert the result back to a string
                 console.log("Result output correctly");
             }
         } catch (error) {
-            numLine.value = "Error"; // Display error for invalid expressions
+            lowerNum.value = "Error"; // Display error for invalid expressions
             currentInput = "";
             console.log("Error:", error);
         }
@@ -70,13 +72,13 @@ document.addEventListener("DOMContentLoaded", function () {
     backspaceButton.addEventListener("click", function () {
         console.log("Backspace button clicked");
         currentInput = currentInput.slice(0, -1)
-        numLine.value = currentInput;
+        lowerNum.value = currentInput;
     });
 
-    // Clear button functionality
+    // Clear button functionality (clears input field)
     clearButton.addEventListener("click", function () {
         console.log("Clear button clicked");
         currentInput= "";
-        numLine.value = "";
+        lowerNum.value = "";
     })
 })

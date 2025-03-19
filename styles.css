@@ -70,12 +70,25 @@ h2 {
     justify-content: center;
 }
 
-#num_line {
+#num_window {
+    background-color: white;
+    border-radius: 16px;
+    width: 250px;
+    margin-right: 10px;
+}
+
+#upper_num {
+    width: 90%;
+    text-align: right;
+    border: none;
+}
+
+#lower_num {
     height: 40px;
-    width: 280px;
+    width: 90%;
     font-size: 25px;
     text-align: right;
-    border-radius: 10px;
+    border: none;
     outline: none;
 }
 
@@ -118,11 +131,11 @@ h2 {
 
 #backspace {
     border-radius: 10px;
-    background-color: rgb(253, 255, 142);
+    background-color: rgb(247, 250, 86);
     width: 40px;
     height: 40px;
     font-size: 20px;
-    align-self: center;
+    align-self: end;
     padding-bottom: 5px;
 }
 
