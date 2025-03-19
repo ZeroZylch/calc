@@ -1,0 +1,17 @@
+h1 {
+    color: blue;
+}
+
+#box {
+    border: 3px solid blue;
+    border-radius: 16px;
+    background-color: hsl(0, 0, 20);
+    width: 50px;
+    height: 50px;
+}
+
+#box p {
+    text-align: center;
+    font-size: 16px;
+    color: white;
+}
