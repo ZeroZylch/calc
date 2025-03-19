@@ -18,8 +18,31 @@ body {
     height: 100vh;
 }
 
+@keyframes rainbow {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
 h1 {
     font-size: 5em;
+}
+
+h2 {
+    background: linear-gradient(
+        125deg,
+        red,orange, yellow, green, blue, indigo, violet,
+        red,orange, yellow, green, blue, indigo, violet,
+        red
+        );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow 2s linear infinite;
 }
 
 #calc-top {
@@ -35,6 +58,7 @@ h1 {
     font-size: 25px;
     text-align: right;
     border-radius: 10px;
+    outline: none;
 }
 
 .calculator-out {
@@ -50,7 +74,7 @@ h1 {
     background: linear-gradient(45deg, rgb(19, 223, 97) 20%, white 90%);
     width: 450px;
     margin: 0 auto;
-    padding: 20px 0 50px 0;
+    padding: 20px 0 0 0;
     border-radius: 34px;
 }
 
