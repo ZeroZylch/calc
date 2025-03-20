@@ -41,12 +41,29 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add a decimal at the end of the input field
     decimalButton.addEventListener("click", function () {
         console.log("Decimal button clicked");
-        if (currentInput !== "" && !currentInput.includes(".") && !isNaN(currentInput[currentInput.length -1])) {
+
+        let operators = /[+\-*/]/;
+
+        if (currentInput !== "" && !operators.test(currentInput) && !currentInput.includes(".")) {
+            currentInput += ".";
+            lowerNum.value = currentInput;
+            console.log("Current Input (decimal added:", currentInput);
+        } else if (currentInput !== "" && operators.test(currentInput) && currentInput.includes(".")) {
+            let numGroups = currentInput.split(operators);
+            if (!numGroups[numGroups.length - 1].includes(".") && !isNaN(currentInput[currentInput.length - 1])) {
+                currentInput += ".";
+                lowerNum.value = currentInput;
+                console.log("Current Input (decimal added:", currentInput);
+            } else {
+                return;
+            }
+        } else if (currentInput !== "" && !currentInput.includes(".") && currentInput[currentInput.length - 1] !== "." && !isNaN(currentInput[currentInput.length - 1])) {
             currentInput += ".";
             lowerNum.value = currentInput;
             console.log("Current Input (decimal added):", currentInput);
         } else {
-            console.log("Decimal already exists or input is invalid");
+            console.log("Cannot add decimal: Either last digit is NaN or there is already a decimal in the string of numbers after the last operator");
+            return;
         }
     });
 
@@ -94,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentInput = ""; // Clear input
                 console.log("Error: Result is not a number");
             } else {
-                upperNum.value = result; // Display the result
+                upperNum.value = ""; // Display the result
                 currentInput = result.toString(); // Convert the result back to a string
                 lowerNum.value = currentInput;
                 console.log("Result output correctly");
@@ -111,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Backspace button clicked");
         currentInput = currentInput.slice(0, -1)
         lowerNum.value = currentInput;
+        predictResult();
     });
 
     // Clear button functionality (clears input field)
@@ -118,5 +136,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Clear button clicked");
         currentInput= "";
         lowerNum.value = "";
+        upperNum.value = "";
     })
 })
