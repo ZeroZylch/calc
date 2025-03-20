@@ -31,10 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Append numbers to the input field
     numButtons.forEach(button => {
         button.addEventListener("click", function () {
-            currentInput += this.getAttribute("data-num");
-            lowerNum.value = currentInput;
-            predictResult();
-            console.log("Current Input (number):", currentInput);
+            if (this.getAttribute("data-num") === "0" && currentInput === "") {
+                return;
+            } else {
+                currentInput += this.getAttribute("data-num");
+                lowerNum.value = currentInput;
+                predictResult();
+                console.log("Current Input (number):", currentInput);
+            }
         });
     });
 
