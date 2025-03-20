@@ -43,26 +43,14 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Decimal button clicked");
 
         let operators = /[+\-*/]/;
+        let numArray = currentInput.split(operators);
 
-        if (currentInput !== "" && !operators.test(currentInput) && !currentInput.includes(".")) {
-            currentInput += ".";
-            lowerNum.value = currentInput;
-            console.log("Current Input (decimal added:", currentInput);
-        } else if (currentInput !== "" && operators.test(currentInput) && currentInput.includes(".")) {
-            let numGroups = currentInput.split(operators);
-            if (!numGroups[numGroups.length - 1].includes(".") && !isNaN(currentInput[currentInput.length - 1])) {
-                currentInput += ".";
-                lowerNum.value = currentInput;
-                console.log("Current Input (decimal added:", currentInput);
-            } else {
-                return;
-            }
-        } else if (currentInput !== "" && !currentInput.includes(".") && currentInput[currentInput.length - 1] !== "." && !isNaN(currentInput[currentInput.length - 1])) {
+        if (currentInput !== "" && !numArray[numArray.length -1].includes(".") && !isNaN(currentInput[currentInput.length -1])) {
             currentInput += ".";
             lowerNum.value = currentInput;
             console.log("Current Input (decimal added):", currentInput);
         } else {
-            console.log("Cannot add decimal: Either last digit is NaN or there is already a decimal in the string of numbers after the last operator");
+            console.log("Cannot add a decimal");
             return;
         }
     });
