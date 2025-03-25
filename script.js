@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const posnegButton = document.getElementById("pos-neg"); // Positive/negative toggle button
 
     let currentInput = ""; // Stores the input expression
+    const maxDigits = 90; // Stores maximum digits that may appear in input field
 
     function predictResult() {
         try {
@@ -33,11 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener("click", function () {
             if (this.getAttribute("data-num") === "0" && currentInput === "") {
                 return;
-            } else {
+            } else if (currentInput.length < maxDigits) {
                 currentInput += this.getAttribute("data-num");
                 lowerNum.value = currentInput;
                 predictResult();
                 console.log("Current Input (number):", currentInput);
+            } else {
+                console.log("Maximum digits reached");
+                return;
             }
         });
     });
