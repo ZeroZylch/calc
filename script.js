@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const backspaceButton = document.getElementById("backspace"); // Backspace button
     const decimalButton = document.getElementById("decimal"); // Decimal button
     const posnegButton = document.getElementById("pos-neg"); // Positive/negative toggle button
+    const percentageButton = document.getElementById("percentage"); // Percentage button
 
     let currentInput = ""; // Stores the input expression
     const maxDigits = 90; // Stores maximum digits that may appear in input field
@@ -29,6 +30,47 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Backspace button functionality (removes last character)
+    backspaceButton.addEventListener("click", function () {
+        console.log("Backspace button clicked");
+        currentInput = currentInput.slice(0, -1)
+        lowerNum.value = currentInput;
+        predictResult();
+    });
+
+    // Clear button functionality (clears input field)
+    clearButton.addEventListener("click", function () {
+        console.log("Clear button clicked");
+        currentInput= "";
+        lowerNum.value = "";
+        upperNum.value = "";
+    })
+
+    // Percentage button functionality
+    percentageButton.addEventListener("click", function () {
+
+        let operators = /[+\-*/]/;
+        let numArray = currentInput.split(operators);
+
+        if (numArray[numArray.length -1] !== "") {
+            console.log("Percentage button clicked");
+            // Save the last string and its length
+            lastString = numArray[numArray.length -1];
+            lastStringLength = lastString.length;
+            console.log("Last string length = " + lastStringLength);
+
+            // Calculate the last string divided by 100
+            percentage = lastString /= 100;
+
+            // Replace the last string in the display by the resulting quotient
+            currentInput = currentInput.slice(0, -lastStringLength);
+            console.log("currentInput after slice: " + currentInput);
+            currentInput += percentage;
+            lowerNum.value = currentInput;
+            predictResult();
+        }
+    })
+
     // Append numbers to the input field
     numButtons.forEach(button => {
         button.addEventListener("click", function () {
@@ -44,26 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
         });
-    });
-
-    // Add a decimal at the end of the input field
-    decimalButton.addEventListener("click", function () {
-        console.log("Decimal button clicked");
-
-        let operators = /[+\-*/]/;
-        let numArray = currentInput.split(operators);
-
-        if (currentInput == "" || numArray[numArray.length -1] == "") {
-            currentInput += "0.";
-            lowerNum.value = currentInput;
-        } else if (currentInput !== "" && !numArray[numArray.length -1].includes(".") && !isNaN(currentInput[currentInput.length -1])) {
-            currentInput += ".";
-            lowerNum.value = currentInput;
-            console.log("Current Input (decimal added):", currentInput);
-        } else {
-            console.log("Cannot add a decimal");
-            return;
-        }
     });
 
     // Append operators to the input field
@@ -97,6 +119,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 
+    // Add a decimal at the end of the input field
+    decimalButton.addEventListener("click", function () {
+        console.log("Decimal button clicked");
+
+        let operators = /[+\-*/]/;
+        let numArray = currentInput.split(operators);
+
+        if (currentInput == "" || numArray[numArray.length -1] == "") {
+            currentInput += "0.";
+            lowerNum.value = currentInput;
+        } else if (currentInput !== "" && !numArray[numArray.length -1].includes(".") && !isNaN(currentInput[currentInput.length -1])) {
+            currentInput += ".";
+            lowerNum.value = currentInput;
+            console.log("Current Input (decimal added):", currentInput);
+        } else {
+            console.log("Cannot add a decimal");
+            return;
+        }
+    });
+
     // Evaluate the expression when "=" is clicked
     equalsButton.addEventListener("click", function () {
         console.log("Equals button clicked");
@@ -121,20 +163,4 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Error:", error);
         }
     });
-
-    // Backspace button functionality (removes last character)
-    backspaceButton.addEventListener("click", function () {
-        console.log("Backspace button clicked");
-        currentInput = currentInput.slice(0, -1)
-        lowerNum.value = currentInput;
-        predictResult();
-    });
-
-    // Clear button functionality (clears input field)
-    clearButton.addEventListener("click", function () {
-        console.log("Clear button clicked");
-        currentInput= "";
-        lowerNum.value = "";
-        upperNum.value = "";
-    })
-})
+});
