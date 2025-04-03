@@ -53,7 +53,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let operators = /[+\-*/]/;
         let numArray = currentInput.split(operators);
 
-        if (currentInput !== "" && !numArray[numArray.length -1].includes(".") && !isNaN(currentInput[currentInput.length -1])) {
+        if (currentInput == "" || numArray[numArray.length -1] == "") {
+            currentInput += "0.";
+            lowerNum.value = currentInput;
+        } else if (currentInput !== "" && !numArray[numArray.length -1].includes(".") && !isNaN(currentInput[currentInput.length -1])) {
             currentInput += ".";
             lowerNum.value = currentInput;
             console.log("Current Input (decimal added):", currentInput);
