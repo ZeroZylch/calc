@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let currentInput = ""; // Stores the input expression
     const maxDigits = 90; // Stores maximum digits that may appear in input field
+    equalsClicked = false; // Stores whether the equals button was just clicked (for resetting entry)
 
     function predictResult() {
         try {
@@ -155,6 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 upperNum.value = ""; // Display the result
                 currentInput = result.toString(); // Convert the result back to a string
                 lowerNum.value = currentInput;
+                equalsClicked = true;
                 console.log("Result output correctly");
             }
         } catch (error) {
