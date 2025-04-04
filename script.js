@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // #region Button and Input Field Variables
     const upperNum = document.getElementById("upper_num"); // The upper input field
     const lowerNum = document.getElementById("lower_num"); // The lower input field
+    const message = document.getElementById("message"); // Message line under input field
     const numButtons = document.querySelectorAll(".num-btn"); // Select all number buttons
     const operatorButtons = document.querySelectorAll(".operator-btn"); // Operator buttons
     const equalsButton = document.getElementById("equals"); // Equals button
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // #endregion
 
     let currentInput = ""; // Stores the input expression
-    const maxDigits = 90; // Stores maximum digits that may appear in input field
+    const maxDigits = 12; // Stores maximum digits that may appear in input field
     equalsClicked = false; // Stores whether the equals button was just clicked (for resetting input field)
 
     // #region Functions
@@ -39,6 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
         upperNum.value = "";
         lowerNum.value = "";
         console.log("Input fields cleared");
+    }
+
+    function clearMessage() {
+        message.textContent = "";
     }
     // #endregion
 
@@ -91,6 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Append numbers to the input field
     numButtons.forEach(button => {
         button.addEventListener("click", function () {
+            clearMessage();
+
             if (this.getAttribute("data-num") === "0" && currentInput === "") {
                 return;
             } else if (equalsClicked === true) {
@@ -119,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
     operatorButtons.forEach(button => {
         button.addEventListener("click", function () {
             console.log("Operator button clicked");
+            clearMessage();
             // Avoid adding multiple operators in a row
             if (equalsClicked === false && currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
                 currentInput += this.getAttribute("data-op");
@@ -200,6 +208,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 equalsClicked = true;
                 console.log("equalsClicked set to TRUE");
                 console.log("Result output correctly");
+                // MESSAGE
+                message.textContent = "Wow, great calculation!"
             }
         } catch (error) {
             lowerNum.value = "Error"; // Display error for invalid expressions
