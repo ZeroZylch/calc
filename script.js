@@ -45,6 +45,18 @@ document.addEventListener("DOMContentLoaded", function () {
     function clearMessage() {
         message.textContent = "";
     }
+
+    function messageHilarity() {
+        if (currentInput === "69") {
+            message.textContent = "NICE";
+        } else if (currentInput === "420") {
+            message.textContent = "BLAZE IT";
+        } else if (currentInput === "80085") {
+            message.textContent = "Hehehe";
+        } else {
+            return;
+        }
+    }
     // #endregion
 
     // #region Backspace Button
@@ -62,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     clearButton.addEventListener("click", function () {
         console.log("Clear button clicked");
         clearInput();
+        clearMessage();
     })
     // #endregion
 
@@ -105,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentInput += this.getAttribute("data-num");
                 lowerNum.value = currentInput;
                 predictResult();
+                messageHilarity();
                 equalsClicked = false;
                 console.log("equalsClicked set to FALSE");
                 console.log("Current Input (number added):", currentInput);
@@ -112,9 +126,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentInput += this.getAttribute("data-num");
                 lowerNum.value = currentInput;
                 predictResult();
+                messageHilarity();
                 console.log("Current Input (number added):", currentInput);
             } else {
                 console.log("Maximum digits reached");
+                message.textContent = "Max digits reached";
                 return;
             }
         });
@@ -210,6 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Result output correctly");
                 // MESSAGE
                 message.textContent = "Wow, great calculation!"
+                messageHilarity();
             }
         } catch (error) {
             lowerNum.value = "Error"; // Display error for invalid expressions
