@@ -17,7 +17,56 @@ document.addEventListener("DOMContentLoaded", function () {
     const maxDigits = 12; // Stores maximum digits that may appear in input field
     equalsClicked = false; // Stores whether the equals button was just clicked (for resetting input field)
 
+    // #region Messages
+    messagesArr = [
+        "Hey, cool number",
+        "Whoa mama nice number crunchin\'",
+        "WOW",
+        "I love math, don't you?",
+        "Way to calculate like a boss",
+        "Impressive digits!",
+        "Numbers are so wild",
+        "Dang, this result is crazy",
+        "A perfectly cromulent number",
+        "Mmm delicious math",
+        "You did it!",
+        "OHHH YEAAAH",
+        "Yup, you just did that",
+        "All this math is making me hungry",
+        "Does this number look... edible to you?",
+        "Good golly, what a NUMBER",
+        "Now that's what I call a calculation!",
+        "You calculated that so good",
+        "Can't stop, won't stop",
+        "Yup, now that's a fabulous number",
+        "I love that for you",
+    ];
+    // #endregion
+
     // #region Functions
+    function generateMessage() {
+        // Save length of array to establish upper range limit
+        // Randomly generate a number from 1 to upper range limit
+        // Use the generated number to select a message from the array
+        // Display the message
+        let upperLimit = messagesArr.length;
+        let randomIndex = Math.floor(Math.random() * upperLimit);
+        console.log("Index generated = " + randomIndex);
+        message.textContent = messagesArr[randomIndex];
+    }
+
+    function messageHilarity() {
+        if (currentInput === "69") {
+            message.textContent = "NICE";
+        } else if (currentInput === "420") {
+            message.textContent = "BLAZE IT";
+        } else if (currentInput === "80085") {
+            message.textContent = "Hehehe";
+        } else {
+            return;
+        }
+    }
+
     function predictResult() {
         try {
             let result = eval(currentInput);
@@ -44,18 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function clearMessage() {
         message.textContent = "";
-    }
-
-    function messageHilarity() {
-        if (currentInput === "69") {
-            message.textContent = "NICE";
-        } else if (currentInput === "420") {
-            message.textContent = "BLAZE IT";
-        } else if (currentInput === "80085") {
-            message.textContent = "Hehehe";
-        } else {
-            return;
-        }
     }
     // #endregion
 
@@ -226,6 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Result output correctly");
                 // MESSAGE
                 message.textContent = "Wow, great calculation!"
+                generateMessage();
                 messageHilarity();
             }
         } catch (error) {
