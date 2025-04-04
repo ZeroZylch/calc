@@ -11,11 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const decimalButton = document.getElementById("decimal"); // Decimal button
     const posnegButton = document.getElementById("pos-neg"); // Positive/negative toggle button
     const percentageButton = document.getElementById("percentage"); // Percentage button
+    const parenthesesButton = document.getElementById("parentheses"); // Parentheses button
     // #endregion
 
+    // #region Document Variables
     let currentInput = ""; // Stores the input expression
     const maxDigits = 12; // Stores maximum digits that may appear in input field
     equalsClicked = false; // Stores whether the equals button was just clicked (for resetting input field)
+    // #endregion
 
     // #region Messages
     messagesArr = [
@@ -23,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Whoa mama nice number crunchin\'",
         "WOW",
         "I love math, don't you?",
-        "Way to calculate like a boss",
+        "You calculated that like a BOSS",
         "Impressive digits!",
         "Numbers are so wild",
         "Dang, this result is crazy",
@@ -115,6 +118,25 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     // #endregion
 
+    // #region Parentheses Button
+    parenthesesButton.addEventListener("click", function () {
+        console.log("Parentheses button clicked");
+
+        let lastOpenParentheses = currentInput.lastIndexOf("(");
+        let lastCloseParentheses = currentInput.lastIndexOf(")");
+
+        if (currentInput === "" || lastOpenParentheses < lastCloseParentheses && currentInput[currentInput.length -1] !== ")") {
+            currentInput += "(";
+            lowerNum.value = currentInput;
+            predictResult();
+        } else if (lastOpenParentheses > lastCloseParentheses) {
+            currentInput += ")";
+            lowerNum.value = currentInput;
+            predictResult();
+        }
+    })
+    // #endregion
+
     // #region Percentage Button
     // Percentage button functionality
     percentageButton.addEventListener("click", function () {
@@ -181,17 +203,21 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Operator button clicked");
             clearMessage();
             // Avoid adding multiple operators in a row
-            if (equalsClicked === false && currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
+            if (currentInput[currentInput.length -1] === ")") {
                 currentInput += this.getAttribute("data-op");
                 lowerNum.value = currentInput;
-                console.log("Current Input (operator added):", currentInput);
+                console.log("Current Input (operator added): ", currentInput);
+            } else if (equalsClicked === false && currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
+                currentInput += this.getAttribute("data-op");
+                lowerNum.value = currentInput;
+                console.log("Current Input (operator added): ", currentInput);
             // If equals button has been clicked, keep input from being erased if an operator is added to result
             } else if (equalsClicked === true && currentInput !== "") {
                 equalsClicked = false;
                 console.log("equalsClicked set to FALSE");
                 currentInput += this.getAttribute("data-op");
                 lowerNum.value = currentInput;
-                console.log("Current Input (operator added):", currentInput);
+                console.log("Current Input (operator added): ", currentInput);
             } else {
                 return;
             }
@@ -264,7 +290,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("equalsClicked set to TRUE");
                 console.log("Result output correctly");
                 // MESSAGE
-                message.textContent = "Wow, great calculation!"
                 generateMessage();
                 messageHilarity();
             }
