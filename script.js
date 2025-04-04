@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // #region Button and Input Field Variables
     const upperNum = document.getElementById("upper_num"); // The upper input field
     const lowerNum = document.getElementById("lower_num"); // The lower input field
     const numButtons = document.querySelectorAll(".num-btn"); // Select all number buttons
@@ -9,11 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const decimalButton = document.getElementById("decimal"); // Decimal button
     const posnegButton = document.getElementById("pos-neg"); // Positive/negative toggle button
     const percentageButton = document.getElementById("percentage"); // Percentage button
+    // #endregion
 
     let currentInput = ""; // Stores the input expression
     const maxDigits = 90; // Stores maximum digits that may appear in input field
-    equalsClicked = false; // Stores whether the equals button was just clicked (for resetting entry)
+    equalsClicked = false; // Stores whether the equals button was just clicked (for resetting input field)
 
+    // #region Functions
     function predictResult() {
         try {
             let result = eval(currentInput);
@@ -23,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Error, predicted result is not a number");
             } else {
                 upperNum.value = result;
-                console.log("Result predicted correctly");
+                console.log("Result predicted");
             }
         } catch (error) {
             upperNum.value = ""; // Leave upper field blank for invalid expressions
@@ -31,6 +34,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function clearInput() {
+        currentInput = "";
+        upperNum.value = "";
+        lowerNum.value = "";
+        console.log("Input fields cleared");
+    }
+    // #endregion
+
+    // #region Backspace Button
     // Backspace button functionality (removes last character)
     backspaceButton.addEventListener("click", function () {
         console.log("Backspace button clicked");
@@ -38,15 +50,17 @@ document.addEventListener("DOMContentLoaded", function () {
         lowerNum.value = currentInput;
         predictResult();
     });
+    // #endregion
 
+    // #region Clear Button
     // Clear button functionality (clears input field)
     clearButton.addEventListener("click", function () {
         console.log("Clear button clicked");
-        currentInput= "";
-        lowerNum.value = "";
-        upperNum.value = "";
+        clearInput();
     })
+    // #endregion
 
+    // #region Percentage Button
     // Percentage button functionality
     percentageButton.addEventListener("click", function () {
 
@@ -71,37 +85,60 @@ document.addEventListener("DOMContentLoaded", function () {
             predictResult();
         }
     })
+    // #endregion
 
+    // #region Number Buttons
     // Append numbers to the input field
     numButtons.forEach(button => {
         button.addEventListener("click", function () {
             if (this.getAttribute("data-num") === "0" && currentInput === "") {
                 return;
-            } else if (currentInput.length < maxDigits) {
+            } else if (equalsClicked === true) {
+                clearInput();
                 currentInput += this.getAttribute("data-num");
                 lowerNum.value = currentInput;
                 predictResult();
-                console.log("Current Input (number):", currentInput);
+                equalsClicked = false;
+                console.log("equalsClicked set to FALSE");
+                console.log("Current Input (number added):", currentInput);
+            } else if (equalsClicked === false && currentInput.length < maxDigits) {
+                currentInput += this.getAttribute("data-num");
+                lowerNum.value = currentInput;
+                predictResult();
+                console.log("Current Input (number added):", currentInput);
             } else {
                 console.log("Maximum digits reached");
                 return;
             }
         });
     });
+    // #endregion
 
+    // #region Operator Buttons
     // Append operators to the input field
     operatorButtons.forEach(button => {
         button.addEventListener("click", function () {
             console.log("Operator button clicked");
             // Avoid adding multiple operators in a row
-            if (currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
+            if (equalsClicked === false && currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
                 currentInput += this.getAttribute("data-op");
                 lowerNum.value = currentInput;
                 console.log("Current Input (operator added):", currentInput);
+            // If equals button has been clicked, keep input from being erased if an operator is added to result
+            } else if (equalsClicked === true && currentInput !== "") {
+                equalsClicked = false;
+                console.log("equalsClicked set to FALSE");
+                currentInput += this.getAttribute("data-op");
+                lowerNum.value = currentInput;
+                console.log("Current Input (operator added):", currentInput);
+            } else {
+                return;
             }
         });
     });
+    // #endregion
 
+    // #region PosNeg Button
     // Toggle input value between positive and negative
     posnegButton.addEventListener("click", function () {
         console.log("Pos-neg button clicked");
@@ -119,7 +156,9 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
     })
+    // #endregion
 
+    // #region Decimal Button
     // Add a decimal at the end of the input field
     decimalButton.addEventListener("click", function () {
         console.log("Decimal button clicked");
@@ -139,7 +178,9 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
     });
+    // #endregion
 
+    // #region Equals Button
     // Evaluate the expression when "=" is clicked
     equalsButton.addEventListener("click", function () {
         console.log("Equals button clicked");
@@ -157,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentInput = result.toString(); // Convert the result back to a string
                 lowerNum.value = currentInput;
                 equalsClicked = true;
+                console.log("equalsClicked set to TRUE");
                 console.log("Result output correctly");
             }
         } catch (error) {
@@ -165,4 +207,5 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Error:", error);
         }
     });
+    // #endregion
 });
