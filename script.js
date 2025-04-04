@@ -250,7 +250,9 @@ document.addEventListener("DOMContentLoaded", function () {
             let result = eval(currentInput);
 
             // Check if result is a valid number
-            if (isNaN(result)) {
+            if (equalsClicked === true) {
+                return;
+            } else if (isNaN(result)) {
                 lowerNum.value = "Error"; // Display Error if result is NaN
                 currentInput = ""; // Clear input
                 console.log("Error: Result is not a number");
