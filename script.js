@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // #region Document Variables
     let currentInput = ""; // Stores the input expression
-    const maxDigits = 12; // Stores maximum digits that may appear in input field
+    const maxDigits = 15; // Stores maximum digits that may appear in input field
     equalsClicked = false; // Stores whether the equals button was just clicked (for resetting input field)
     // #endregion
 
@@ -47,6 +47,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // #endregion
 
     // #region Functions
+    function adjustFontSize() {
+        const maxFontSize = 25;
+        const minFontSize = 20;
+        // const lowerNumWidth = lowerNum.offsetWidth;
+
+        if (currentInput.length > 12) {
+            lowerNum.style.fontSize = minFontSize + "px";
+        } else {
+            lowerNum.style.fontSize = maxFontSize + "px";
+        }
+    }
+
     function generateMessage() {
         // Save length of array to establish upper range limit
         // Randomly generate a number from 1 to upper range limit
@@ -105,6 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Backspace button clicked");
         currentInput = currentInput.slice(0, -1)
         lowerNum.value = currentInput;
+        adjustFontSize();
         predictResult();
     });
     // #endregion
@@ -176,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 clearInput();
                 currentInput += this.getAttribute("data-num");
                 lowerNum.value = currentInput;
+                adjustFontSize();
                 predictResult();
                 messageHilarity();
                 equalsClicked = false;
@@ -184,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if (equalsClicked === false && currentInput.length < maxDigits) {
                 currentInput += this.getAttribute("data-num");
                 lowerNum.value = currentInput;
+                adjustFontSize();
                 predictResult();
                 messageHilarity();
                 console.log("Current Input (number added):", currentInput);
@@ -206,10 +221,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (currentInput[currentInput.length -1] === ")") {
                 currentInput += this.getAttribute("data-op");
                 lowerNum.value = currentInput;
+                adjustFontSize();
                 console.log("Current Input (operator added): ", currentInput);
             } else if (equalsClicked === false && currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
                 currentInput += this.getAttribute("data-op");
                 lowerNum.value = currentInput;
+                adjustFontSize();
                 console.log("Current Input (operator added): ", currentInput);
             // If equals button has been clicked, keep input from being erased if an operator is added to result
             } else if (equalsClicked === true && currentInput !== "") {
@@ -217,6 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("equalsClicked set to FALSE");
                 currentInput += this.getAttribute("data-op");
                 lowerNum.value = currentInput;
+                adjustFontSize();
                 console.log("Current Input (operator added): ", currentInput);
             } else {
                 return;
