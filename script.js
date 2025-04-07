@@ -138,7 +138,14 @@ document.addEventListener("DOMContentLoaded", function () {
         let lastOpenParentheses = currentInput.lastIndexOf("(");
         let lastCloseParentheses = currentInput.lastIndexOf(")");
 
-        if (currentInput === "" || lastOpenParentheses < lastCloseParentheses && currentInput[currentInput.length -1] !== ")") {
+        if (equalsClicked === true) {
+            currentInput = "";
+            currentInput += "(";
+            lowerNum.value = currentInput;
+            predictResult();
+            equalsClicked = false;
+            console.log("equalsClicked set to FALSE");
+        } else if (currentInput === "" || currentInput !== "" && lastOpenParentheses === lastCloseParentheses && isNaN(currentInput[currentInput.length -1]) || lastOpenParentheses < lastCloseParentheses && currentInput[currentInput.length -1] !== ")") {
             currentInput += "(";
             lowerNum.value = currentInput;
             predictResult();
