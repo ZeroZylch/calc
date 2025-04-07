@@ -101,8 +101,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function clearInput() {
         currentInput = "";
-        upperNum.value = "";
-        lowerNum.value = "";
+        upperNum.value = currentInput;
+        lowerNum.value = currentInput;
         console.log("Input fields cleared");
     }
 
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let lastCloseParentheses = currentInput.lastIndexOf(")");
 
         if (equalsClicked === true) {
-            currentInput = "";
+            clearInput();
             currentInput += "(";
             lowerNum.value = currentInput;
             predictResult();
@@ -210,8 +210,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 messageHilarity();
                 console.log("Current Input (number added):", currentInput);
             } else {
-                console.log("Maximum digits reached");
                 message.textContent = "Max digits reached";
+                console.log("Maximum digits reached");
                 return;
             }
         });
@@ -278,7 +278,13 @@ document.addEventListener("DOMContentLoaded", function () {
         let operators = /[+\-*/]/;
         let numArray = currentInput.split(operators);
 
-        if (currentInput == "" || numArray[numArray.length -1] == "") {
+        if (equalsClicked === true) {
+            clearInput();
+            currentInput +="0."
+            lowerNum.value = currentInput;
+            equalsClicked = false;
+            console.log("equalsClicked set to FALSE");
+        } else if (currentInput === "" || numArray[numArray.length -1] === "") {
             currentInput += "0.";
             lowerNum.value = currentInput;
         } else if (currentInput !== "" && !numArray[numArray.length -1].includes(".") && !isNaN(currentInput[currentInput.length -1])) {
