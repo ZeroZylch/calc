@@ -87,7 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (currentInput === "420") {
             message.textContent = "BLAZE IT";
         } else if (currentInput === "80085") {
-            message.textContent = "Hehehe";
+            message.textContent = "Hehehe classic";
+        } else if (currentInput === "1+1") {
+            message.textContent = "...really?";
         } else {
             return;
         }
@@ -303,13 +305,25 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             // Ensure the expression is valid and evaluate it
             let result = eval(currentInput);
+            let lastOpenParentheses = currentInput.lastIndexOf("(");
+            let lastCloseParentheses = currentInput.lastIndexOf(")");
 
             // Check if result is a valid number
             if (equalsClicked === true) {
                 return;
+
+
+            } else if (currentInput.includes("(") && !currentInput.includes(")")) {
+                currentInput += ")";
+                replaceInput(eval(currentInput).toString());
+                equalsClicked = true;
+                console.log("equalsClicked set to TRUE");
+
+
             } else if (isNaN(result)) {
-                lowerNum.value = "Error"; // Display Error if result is NaN
                 clearInput();
+                lowerNum.value = "Error"; // Display Error if result is NaN
+                message.textContent = "Result is not a number";
                 console.log("Error: Result is not a number");
             } else {
                 upperNum.value = ""; // Display the result
@@ -322,8 +336,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 messageHilarity();
             }
         } catch (error) {
-            lowerNum.value = "Error"; // Display error for invalid expressions
             clearInput();
+            lowerNum.value = "Error"; // Display error for invalid expressions
+            message.textContent = error;
             console.log("Error:", error);
         }
     });
