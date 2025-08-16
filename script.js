@@ -77,6 +77,16 @@ document.addEventListener("DOMContentLoaded", function () {
         lowerNum.value = currentInput;
     }
 
+    function getFirstNumber(str) {
+        let match = str.match(/^\d+/); // match digits at the beginning
+        return match ? match[0] : "";
+
+        // ^ -> start of the string
+        // \d+ -> one or more digits
+        // match() -> returns an array, where [0] is the matched number
+        // If there's no number at the beginning, it returns null, so we return "" instead
+    }
+
     function generateMessage() {
         // Save length of array to establish upper range limit
         // Randomly generate a number from 1 to upper range limit
@@ -135,9 +145,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Backspace button functionality (removes last character)
     backspaceButton.addEventListener("click", function () {
         console.log("Backspace button clicked");
-        replaceInput(currentInput.slice(0, -1));
+        replaceInput(lowerNum.value.slice(0, -1));
         adjustFontSize();
-        predictResult();
+        // predictResult();
     });
     // #endregion
 
@@ -217,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if (operatorClicked === true) {
                 // If an operator has been clicked, clear lowerNum and append number
                 lowerNum.value = "";
-                console.log("lowerNum cleared")
+                console.log("lowerNum cleared");
                 lowerNum.value += this.getAttribute("data-num");
                 console.log("Number appended to lowerNum (", lowerNum.value, ")");
                 operatorClicked = false;
@@ -232,7 +242,11 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener("click", function () {
             console.log("Operator button clicked");
             clearMessage();
-            if (lowerNum.value === "" && upperNum.value === "") {
+            if (upperNum.value.includes("=")) {
+                upperNum.value = lowerNum.value + this.getAttribute("data-op");
+                operatorClicked = true;
+                console.log("operatorClicked set to TRUE");
+            } else if (lowerNum.value === "" && upperNum.value === "") {
                 // if lowerNum and upperNum are both blank, do nothing
                 return;
             } else if (lowerNum.value !== "" && upperNum.value === "") {
@@ -309,11 +323,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (equalsClicked === true && upperNum.value === "") {
                 return;
-            } else if (upperNum.value.includes("=")) {
+            } else if (equalsClicked === true && upperNum.value.includes("=")) {
+                let firstNum = getFirstNumber(lowerNum.value);
+                let firstOperator = upperNum.value.search(/[+\-*/]/);
+                let fromOperatorOnward = (firstOperator !== -1) ? upperNum.value.slice(firstOperator) : "";
+                console.log("firstNum = ", firstNum, "| firstOperator = ", firstOperator, "| from OperatorOnward = ", fromOperatorOnward);
+                upperNum.value = firstNum + fromOperatorOnward;
+                lowerNum.value = "" + eval(upperNum.value.slice(0, -1));
                 return;
-                // upperNum.value = upperNum.value.slice(0, -1);
-                // let result = eval(upperNum.value + lowerNumParenthesis);
-                // lowerNum.value = result;
             } else if (upperNum.value !== "" && lowerNum.value !== "") {
                 lowerNumParenthesis = "(" + lowerNum.value + ")";
                 let result = eval(upperNum.value + lowerNumParenthesis);
