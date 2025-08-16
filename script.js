@@ -77,16 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
         lowerNum.value = currentInput;
     }
 
-    function getFirstNumber(str) {
-        let match = str.match(/^\d+/); // match digits at the beginning
-        return match ? match[0] : "";
-
-        // ^ -> start of the string
-        // \d+ -> one or more digits
-        // match() -> returns an array, where [0] is the matched number
-        // If there's no number at the beginning, it returns null, so we return "" instead
-    }
-
     function generateMessage() {
         // Save length of array to establish upper range limit
         // Randomly generate a number from 1 to upper range limit
@@ -324,13 +314,24 @@ document.addEventListener("DOMContentLoaded", function () {
             if (equalsClicked === true && upperNum.value === "") {
                 return;
             } else if (equalsClicked === true && upperNum.value.includes("=")) {
-                let firstNum = getFirstNumber(lowerNum.value);
-                let firstOperator = upperNum.value.search(/[+\-*/]/);
-                let fromOperatorOnward = (firstOperator !== -1) ? upperNum.value.slice(firstOperator) : "";
-                console.log("firstNum = ", firstNum, "| firstOperator = ", firstOperator, "| from OperatorOnward = ", fromOperatorOnward);
-                upperNum.value = firstNum + fromOperatorOnward;
-                lowerNum.value = "" + eval(upperNum.value.slice(0, -1));
-                return;
+                function splitFirstNumber(expression) {
+                    // match the first number (can include minus sign)
+                    let match = expression.match(/^-?\d+/);
+                    if (!match) return { firstNum: "", rest: expression };
+
+                    let firstNum = match[0];
+                    let rest = expression.slice(firstNum.length);
+
+                    return { firstNum, rest };
+                }
+
+                let upperNumSplit = splitFirstNumber(upperNum.value);
+
+                upperNum.value = lowerNum.value + upperNumSplit.rest;
+                lowerNum.value = eval(upperNum.value.slice(0, -1));
+                // MESSAGE
+                generateMessage();
+                messageHilarity();
             } else if (upperNum.value !== "" && lowerNum.value !== "") {
                 lowerNumParenthesis = "(" + lowerNum.value + ")";
                 let result = eval(upperNum.value + lowerNumParenthesis);
@@ -338,6 +339,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 lowerNum.value = result;
                 equalsClicked = true;
                 console.log("equalsClicked set to TRUE");
+                // MESSAGE
+                generateMessage();
+                messageHilarity();
             }
 
             // Check if result is a valid number
