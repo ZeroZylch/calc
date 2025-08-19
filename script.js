@@ -16,8 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // #region Document Variables
     let currentInput = ""; // Stores the input expression
-    const maxDigits = 15; // Stores maximum digits that may appear in input field
-    equalsClicked = false; // Stores whether the equals button was just clicked (for resetting input field)
+    const maxDigits = 13; // Stores maximum digits that may appear in input field
+    operatorClicked = false; // Stores whether an operator was just clicked
+    equalsClicked = false; // Stores whether the equals button was just clicked
     // #endregion
 
     // #region Messages
@@ -59,8 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Adds the number or symbol clicked to currentInput and updates the input field
-    function addInput(char) {
+    // Adds the number or symbol clicked to currentInput and displays expression in upperNum
+    function addLowerInput(char) {
         currentInput += char;
         lowerNum.value = currentInput;
     }
@@ -128,9 +129,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Backspace button functionality (removes last character)
     backspaceButton.addEventListener("click", function () {
         console.log("Backspace button clicked");
-        replaceInput(currentInput.slice(0, -1));
+        replaceInput(lowerNum.value.slice(0, -1));
+        clearMessage();
         adjustFontSize();
-        predictResult();
+        // predictResult();
     });
     // #endregion
 
@@ -140,30 +142,34 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Clear button clicked");
         clearInput();
         clearMessage();
+        operatorClicked = false;
+        equalsClicked = false;
+        console.log("operatorClicked set to: ", operatorClicked);
+        console.log("equalsClicked set to: ", equalsClicked);
     })
     // #endregion
 
     // #region Parentheses Button
-    parenthesesButton.addEventListener("click", function () {
-        console.log("Parentheses button clicked");
+    // parenthesesButton.addEventListener("click", function () {
+    //     console.log("Parentheses button clicked");
 
-        let lastOpenParentheses = currentInput.lastIndexOf("(");
-        let lastCloseParentheses = currentInput.lastIndexOf(")");
+    //     let lastOpenParentheses = currentInput.lastIndexOf("(");
+    //     let lastCloseParentheses = currentInput.lastIndexOf(")");
 
-        if (equalsClicked === true) {
-            clearInput();
-            addInput("(");
-            predictResult();
-            equalsClicked = false;
-            console.log("equalsClicked set to FALSE");
-        } else if (currentInput === "" || currentInput !== "" && lastOpenParentheses === lastCloseParentheses && isNaN(currentInput[currentInput.length -1]) || lastOpenParentheses < lastCloseParentheses && currentInput[currentInput.length -1] !== ")") {
-            addInput("(");
-            predictResult();
-        } else if (lastOpenParentheses > lastCloseParentheses) {
-            addInput(")");
-            predictResult();
-        }
-    })
+    //     if (equalsClicked === true) {
+    //         clearInput();
+    //         addLowerInput("(");
+    //         predictResult();
+    //         equalsClicked = false;
+    //         console.log("equalsClicked set to FALSE");
+    //     } else if (currentInput === "" || currentInput !== "" && lastOpenParentheses === lastCloseParentheses && isNaN(currentInput[currentInput.length -1]) || lastOpenParentheses < lastCloseParentheses && currentInput[currentInput.length -1] !== ")") {
+    //         addLowerInput("(");
+    //         predictResult();
+    //     } else if (lastOpenParentheses > lastCloseParentheses) {
+    //         addLowerInput(")");
+    //         predictResult();
+    //     }
+    // })
     // #endregion
 
     // #region Percentage Button
@@ -185,72 +191,74 @@ document.addEventListener("DOMContentLoaded", function () {
             // Replace the last string in the display by the resulting quotient
             currentInput = currentInput.slice(0, -lastStringLength);
             console.log("currentInput after slice: " + currentInput);
-            addInput(percentage);
+            addLowerInput(percentage);
             predictResult();
         }
     })
     // #endregion
 
     // #region Number Buttons
-    // Append numbers to the input field
     numButtons.forEach(button => {
         button.addEventListener("click", function () {
-            clearMessage();
+            console.log("Number clicked, equalsClicked: ", equalsClicked, "operatorClicked: ", operatorClicked);
 
-            if (this.getAttribute("data-num") === "0" && currentInput === "") {
-                return;
-            } else if (equalsClicked === true) {
-                clearInput();
-                addInput(this.getAttribute("data-num"));
-                adjustFontSize();
-                predictResult();
-                messageHilarity();
-                equalsClicked = false;
-                console.log("equalsClicked set to FALSE");
-                console.log("Current Input (number added):", currentInput);
-            } else if (equalsClicked === false && currentInput.length < maxDigits) {
-                addInput(this.getAttribute("data-num"));
-                adjustFontSize();
-                predictResult();
-                messageHilarity();
-                console.log("Current Input (number added):", currentInput);
+            if (lowerNum.value.length < maxDigits || operatorClicked === true || equalsClicked === true) {
+                if (equalsClicked === true) {
+                    upperNum.value = "";
+                    lowerNum.value = "";
+                    lowerNum.value += this.getAttribute("data-num");
+                    equalsClicked = false;
+                } else {
+                    if (lowerNum.value === "" && this.getAttribute("data-num") !== "0") {
+                        lowerNum.value += this.getAttribute("data-num");
+                    } else if (lowerNum.value === "0") {
+                        lowerNum.value = "" + this.getAttribute("data-num");
+                    } else if (lowerNum.value !== "") {
+                        if (operatorClicked === true) {
+                            lowerNum.value = "" + this.getAttribute("data-num");
+                            operatorClicked = false;
+                            equalsClicked = false;
+                        } else {
+                            lowerNum.value += this.getAttribute("data-num");
+                        }
+                    }
+                }
             } else {
                 message.textContent = "Max digits reached";
-                console.log("Maximum digits reached");
-                return;
             }
-        });
+        })
     });
     // #endregion
 
     // #region Operator Buttons
-    // Append operators to the input field
     operatorButtons.forEach(button => {
         button.addEventListener("click", function () {
-            console.log("Operator button clicked");
             clearMessage();
-            // Avoid adding multiple operators in a row
-            // if (currentInput[currentInput.length -1] === ")") {
-            //     addInput(this.getAttribute("data-op"));
-            //     adjustFontSize();
-            //     console.log("Current Input (operator added): ", currentInput);
-            // } else
-            if (currentInput[currentInput.length -1] === ")" || equalsClicked === false && currentInput !== "" && !isNaN(currentInput[currentInput.length -1])) {
-                addInput(this.getAttribute("data-op"));
-                adjustFontSize();
-                console.log("Current Input (operator added): ", currentInput);
-            // If equals button has been clicked, keep input from being erased if an operator is added to result
-            } else if (equalsClicked === true && currentInput !== "") {
+            if (upperNum.value.includes("=")) {
+                upperNum.value = lowerNum.value + this.getAttribute("data-op");
+                operatorClicked = true;
                 equalsClicked = false;
-                console.log("equalsClicked set to FALSE");
-                addInput(this.getAttribute("data-op"));
-                adjustFontSize();
-                console.log("Current Input (operator added): ", currentInput);
-            } else {
-                return;
+                console.log("operatorClicked set to ", operatorClicked);
+                console.log("equalsClicked set to: ", equalsClicked);
+            } else if (lowerNum.value === "" && upperNum.value === "") {
+                // if lowerNum and upperNum are both blank, do nothing
+                upperNum.value = "0" + this.getAttribute("data-op");
+                lowerNum.value = "0";
+            } else if (lowerNum.value !== "" && upperNum.value === "") {
+                upperNum.value += lowerNum.value + this.getAttribute("data-op");
+                console.log("Added lowerNum value to upperNum");
+                operatorClicked = true;
+                console.log("operatorClicked set to ", operatorClicked);
+            } else if (upperNum.value !== "" && isNaN(upperNum.value[upperNum.value.length -1])) {
+                // if last digit of upperNum is an operator, replace it
+                upperNum.value = upperNum.value.slice(0, -1);
+                upperNum.value += this.getAttribute("data-op");
+                console.log("Operator replaced in upperNum");
+                operatorClicked = true;
+                console.log("operatorClicked set to ", operatorClicked);
             }
-        });
-    });
+        })
+    })
     // #endregion
 
     // #region PosNeg Button
@@ -258,13 +266,12 @@ document.addEventListener("DOMContentLoaded", function () {
     posnegButton.addEventListener("click", function () {
         console.log("Pos-neg button clicked");
         try {
-            let result = currentInput * -1;
+            let result = lowerNum.value * -1;
 
             if (isNaN(result)) {
                 return;
             } else {
-                currentInput = result.toString();
-                lowerNum.value = currentInput;
+                lowerNum.value = result.toString();
             }
         } catch (error) {
             console.log("Error:", error);
@@ -283,13 +290,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (equalsClicked === true) {
             clearInput();
-            addInput("0.");
+            addLowerInput("0.");
             equalsClicked = false;
             console.log("equalsClicked set to FALSE");
         } else if (currentInput === "" || numArray[numArray.length -1] === "") {
-            addInput("0.");
+            addLowerInput("0.");
         } else if (currentInput !== "" && !numArray[numArray.length -1].includes(".") && !isNaN(currentInput[currentInput.length -1])) {
-            addInput(".");
+            addLowerInput(".");
             console.log("Current Input (decimal added):", currentInput);
         } else {
             console.log("Cannot add a decimal");
@@ -301,36 +308,46 @@ document.addEventListener("DOMContentLoaded", function () {
     // #region Equals Button
     // Evaluate the expression when "=" is clicked
     equalsButton.addEventListener("click", function () {
-        console.log("Equals button clicked");
+        console.log("Equals button clicked, equalsClicked =", equalsClicked);
         try {
-            // Ensure the expression is valid and evaluate it
-            let result = eval(currentInput);
-            let lastOpenParentheses = currentInput.lastIndexOf("(");
-            let lastCloseParentheses = currentInput.lastIndexOf(")");
-
-            // Check if result is a valid number
-            if (equalsClicked === true) {
+            if (equalsClicked === true && upperNum.value === "") {
                 return;
+            } else if (equalsClicked === true && upperNum.value.includes("=")) {
+                function fixDoubleMinus(expression) {
+                    return expression.replace(/--/g, "+");
+                }
 
+                function splitFirstNumber(expression) {
+                    // match the first number (can include minus sign)
+                    let match = expression.match(/^-?\d+/);
+                    if (!match) return { firstNum: "", rest: expression };
 
-            } else if (currentInput.includes("(") && !currentInput.includes(")")) {
-                currentInput += ")";
-                replaceInput(eval(currentInput).toString());
+                    let firstNum = match[0];
+                    let rest = expression.slice(firstNum.length);
+
+                    return { firstNum, rest };
+                }
+
+                let upperNumSplit = splitFirstNumber(upperNum.value);
+                fixedDoubleMinus = fixDoubleMinus(upperNumSplit.rest);
+
+                let hiddenExpression = lowerNum.value + fixedDoubleMinus;
+
+                upperNum.value = lowerNum.value + upperNumSplit.rest;
+                lowerNum.value = eval(hiddenExpression.slice(0, -1));
+                console.log("MOO");
+
+                // MESSAGE
+                generateMessage();
+                messageHilarity();
+            } else if (upperNum.value !== "" && lowerNum.value !== "") {
+                lowerNumParenthesis = "(" + lowerNum.value + ")";
+                let result = eval(upperNum.value + lowerNumParenthesis);
+                upperNum.value += lowerNum.value + "=";
+                lowerNum.value = result;
                 equalsClicked = true;
-                console.log("equalsClicked set to TRUE");
-
-
-            } else if (isNaN(result)) {
-                clearInput();
-                lowerNum.value = "Error"; // Display Error if result is NaN
-                message.textContent = "Result is not a number";
-                console.log("Error: Result is not a number");
-            } else {
-                upperNum.value = ""; // Display the result
-                replaceInput(result.toString());
-                equalsClicked = true;
-                console.log("equalsClicked set to TRUE");
-                console.log("Result output correctly");
+                console.log("equalsClicked set to ", equalsClicked);
+                console.log("MEOW");
                 // MESSAGE
                 generateMessage();
                 messageHilarity();
